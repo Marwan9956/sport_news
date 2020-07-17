@@ -6,6 +6,7 @@
  */
 
 require('./bootstrap');
+import $ from "jquery";
 
 window.Vue = require('vue');
 
@@ -30,4 +31,19 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app'
+});
+
+
+$(document).ready(function(){
+    var counter = 0;
+    var inputHtml = `<input id="headLines${counter}" class="form-control" type="text" name="headLines${counter}" /> 
+                     <br/>`;
+    //add new head line news input field
+    var btnAddHeadLine = $('#addNewHeadLines');  
+    btnAddHeadLine.on('click',function(e){
+        $(`<input id="headLines${counter}" class="form-control" type="text" name="headLines${counter}" /> 
+        <br/>`).insertBefore(this);
+        counter++;
+        e.preventDefault();
+    });
 });
