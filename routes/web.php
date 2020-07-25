@@ -34,3 +34,11 @@ Route::put('/headlines/edit/{id}','news_controller@edit_headlines')->name('editH
 Route::get('/news/create' ,'news_controller@news_post_form')->name('createNews');
 Route::post('/news/create','news_controller@news_post')->name('storeNews');
 
+//Categories
+Route::get('/news/categories','news_controller@categories_display')->name('categories');
+Route::get('/news/categories/add','news_controller@categories_form')->name('categories_form');
+Route::post('/news/categories/add','news_controller@categories_store')->name('categories_store');
+Route::delete('/news/categories/delete/{id}','news_controller@categories_delete')->name('categories_delete');
+Route::get('/news/categories/edit/{id}','news_controller@categories_edit')->name('categories_edit');
+Route::put('/news/categories/edit/{id}','news_controller@categories_edit_apply')->name('categories_edit_apply');
+

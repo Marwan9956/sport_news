@@ -11052,3 +11052,7 @@ label {
   flex-basis: 70%;
 }
 
+.dropdown {
+  display: inline-block;
+}
+

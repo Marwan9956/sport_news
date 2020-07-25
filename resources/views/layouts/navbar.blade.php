@@ -5,9 +5,31 @@
         </div>
         <div class="top-right">
             @auth
-                <a href="{{route('createList')}}">Create List</a>
-                <a href="{{route('showLists')}}">Show Lists </a>
+                <div class="dropdown show">
+                    <a class="btn  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        News lists
+                    </a>
+                
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{{route('createList')}}">Create List</a>
+                        <a class="dropdown-item" href="{{route('showLists')}}">Show Lists </a>
+                    </div>
+                </div>
+                
                 <a href="{{route('createNews')}}">Add News</a>
+
+                <div class="dropdown show">
+                    <a class="btn  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Categories
+                    </a>
+                  
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{{route('categories')}}">display</a>
+                        <a class="dropdown-item" href="{{route('categories_form')}}">add</a>
+                    </div>
+                </div>
+
+
                 <a>{{ Auth::user()->name }}</a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST">
                     @csrf

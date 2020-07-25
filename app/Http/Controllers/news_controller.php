@@ -37,7 +37,17 @@ class news_controller extends Controller
     }
 
     public function delete_headlines($id){
-        return 'create delete headlines';
+        $headLines = headlines_news::find($id);
+        try{
+            if(!$headLines->delete()){
+                throw new StoringDataException('Headlines has not been removed try again . ');   
+            }
+            return redirect()->back()->with('success','Headlines Deleted successfully .');
+        }catch(StoringDataException $e){
+            return redirect()->back()->withErrors($e->getMessage());
+        }catch(Exception $e){
+            return redirect()->back()->withErrors('Server Error Try Again later. ');
+        }
     }
 
     /**
@@ -174,6 +184,79 @@ class news_controller extends Controller
             return redirect()->back()
                     ->withErrors('Error : Server Error Try Again.')
                     ->withInput();
+        }
+    }
+
+
+    /**
+     * Categories Section
+     */
+    public function categories_display(){
+        $categories = news_type::all();
+        return view('categories')->with('categories',$categories);
+    }
+ 
+    public function categories_form(){
+        return view('forms.categories');
+    }
+
+    public function categories_store(Request $req){
+        $validate = $req->validate([
+            'category_name' => 'required',
+            'description'   => 'required'
+        ]);
+
+        $newsType = new news_type;
+        $newsType->type_name = $req->category_name;
+        $newsType->description = $req->description;
+        try{
+            if(!$newsType->save()){
+                throw new StoringDataException('Error: new category has not been added successfully.');
+            }
+            return redirect('/news/categories')->with('success', 'New Category Added successfully');
+        }catch(StoringDataException $e){
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
+
+        }catch(Exception $e){
+            return redirect()->back()->withErrors('Error : Server Error please try again later.')->withInput();
+        }
+        
+    }
+
+    public function categories_edit($id){
+        $category = news_type::find($id);
+        if(is_null($category)){
+            return redirect()->back()->withErrors('Error : No Category with this ID.');
+        }else{
+            return view('forms.categories_edit')->with('category' , $category);
+        }
+    }
+    public function categories_edit_apply(Request $req , $id){
+        $req->validate([
+            'category_name' => 'required',
+            'description'   => 'required'
+        ]);
+
+        $category = news_type::find($id);
+        $category->type_name = $req->category_name;
+        $category->description = $req->description;
+        try{
+            if(!$category->save()){
+                throw new StoringDataException('Error : We could not update your data successfully.');
+            }
+            return redirect('/news/categories')->with('success','Category updated successfully. ');
+        }catch(StoringDataException $e){
+            return redirect()->back()->withErrors($e->getMessage());
+        }catch(Exception $e){
+            return redirect()->back()->withErrors('Error : Server Error try again later');
+        }
+    }
+
+    public function categories_delete($id){
+        if(news_type::destroy($id)){
+            return redirect()->back()->with('success','Category Deleted successfully.');
+        }else{
+            return redirect()->back()->withErrors('Error : Server Error Please Try again later .');
         }
     }
 }
