@@ -9,13 +9,7 @@
                 <p>{{$item->id}} -</p>
                 &nbsp;&nbsp;
                 <p class="main-text">{{$item->text}}</p> 
-                <form method="POST" action="{{route('editHeadlines',$item->id)}}">
-                    @csrf
-                    @method('PUT')
-                    <button name="editHeadLines" class="btn btn-warning">
-                        Edit
-                    </button>
-                </form>
+                <a href="{{route('editHeadlines_form',$item->id)}}" class="btn btn-warning">Edit</a>
                 &nbsp;&nbsp; 
                 <form method="POST" action="{{route('deleteHeadlines',$item->id)}}">
                     @csrf

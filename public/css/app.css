@@ -11052,7 +11052,34 @@ label {
   flex-basis: 70%;
 }
 
+.headline-text {
+  display: inline-block;
+  flex-basis: 20% !important;
+}
+
+.middle-text {
+  display: inline-block;
+  flex-basis: 55% !important;
+}
+
+.form-box {
+  flex-basis: 20% !important;
+  display: flex;
+}
+
+.form-box > form {
+  margin: 0 5px;
+}
+
 .dropdown {
   display: inline-block;
+}
+
+.dropdown-toggle,
+.dropdown-item {
+  color: #636b6f;
+  /* padding: 0 25px;*/
+  font-size: 13px;
+  font-weight: 600;
 }
 

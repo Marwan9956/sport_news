@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 
-                <a href="{{route('createNews')}}">Add News</a>
+                
 
                 <div class="dropdown show">
                     <a class="btn  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -29,6 +29,8 @@
                     </div>
                 </div>
 
+                <a href="{{route('createNews')}}">Add News</a>
+                <a href="{{route('createHeadlines_form')}}">Add Headlines</a>
 
                 <a>{{ Auth::user()->name }}</a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST">
