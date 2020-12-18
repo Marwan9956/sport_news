@@ -15,8 +15,8 @@ class CreateTableNewsHeader extends Migration
     {
         Schema::create('news_header', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
             $table->string('title');
             $table->text('headText');
         });

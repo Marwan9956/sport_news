@@ -1,8 +1,10 @@
-- Make ajax request every 4min and if there is new news add it to the data
-
--  hide notification after couple of second and maybe add a close X button
+Gmail  Activate website 
+0-Change all forms to Vue JS Component 
  
+
+
 1-Deleteing Category will delete all news post by this category 
 
 2- news header list delete will delete all news post and headlines 
 
+-check authinecate redirect back 

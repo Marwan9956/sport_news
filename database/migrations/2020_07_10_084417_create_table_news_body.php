@@ -19,8 +19,8 @@ class CreateTableNewsBody extends Migration
             $table->unsignedBigInteger('news_header_id');
             $table->foreign('news_header_id')->references('id')->on('news_header');
             
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
             $table->string('title',100);
             $table->text('body');
             $table->unsignedBigInteger('type_id');

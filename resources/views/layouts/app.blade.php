@@ -22,8 +22,8 @@
 <body>
     @include('layouts.navbar')
     <div id="app">
-        @include('message.error')
-        @include('message.success')
+        @include('message.notification')
+        
 
         <main class="py-4">
             @yield('content')

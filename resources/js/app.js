@@ -24,6 +24,10 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('app', require('./components/App.vue').default);
+Vue.component('notification', require('./components/notification.vue').default);
+Vue.component('news-post', require('./components/forms/news-post.vue').default);
+Vue.component('headlines', require('./components/forms/headlines.vue').default);
+Vue.component('categories', require('./components/forms/categories.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

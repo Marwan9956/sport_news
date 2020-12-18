@@ -21,7 +21,7 @@ class news_controller extends Controller
     }
 
     public function show_all_list(){
-        $newsHeaderList = news_header::all();
+        $newsHeaderList = news_header::select('*')->orderBy('id','desc')->get();
         return view('showLists')->with('newsHeaderList',$newsHeaderList);
     }
 
@@ -46,10 +46,13 @@ class news_controller extends Controller
             return \redirect()->back()->withErrors('Error: No Headlines with this ID.');
         }
 
-        return view('forms.editHeadlines')
+        return view('forms.headlines')
                 ->with([
                         'headLines'   => $headLines,
-                        'newsHeader'  => $newsHeader
+                        'newsHeader'  => $newsHeader,
+                        'actionURL'   => route('editHeadlines',$headLines->id),
+                        'postMethod'  => 'PUT',
+                        'headerText'  => 'Edit Headlines'
                     ]);
     }
 
@@ -94,7 +97,11 @@ class news_controller extends Controller
      * Display Creating headlines Form 
      */
     public function add_headlines_form(){
-        return view('forms.createHeadlines');
+
+        return view('forms.headlines')->with([
+            'headerText'  => 'Add Headlines',
+            'actionURL'   => route('createHeadlines')
+        ]);
     }
 
     /**
@@ -145,7 +152,7 @@ class news_controller extends Controller
      * Display all news post by news list id 
      */
     public function show_news_post_by_list($listID){
-        $newsPosts = news_header::find($listID)->newsPost ;
+        $newsPosts = news_header::find($listID)->newsPost()->orderBy('id','desc')->get();
         return view('newsPost')->with('newsPosts',$newsPosts);
     }
 
@@ -244,7 +251,11 @@ class news_controller extends Controller
     public function news_post_form(){
         //Grap Types and send it to view
         $newsTypes = news_type::orderBy('type_name', 'asc')->get();
-        return view('forms.news_body')->with('newsTypes',$newsTypes);
+        return view('forms.news_body')->with([
+                                                'form_type' => 'create',
+                                                'title'     => 'Create News',
+                                                'newsTypes' => $newsTypes
+                                            ]);
     }
 
     
@@ -255,9 +266,11 @@ class news_controller extends Controller
     public function form_edit_news_post($id){
         $newsPost = news_body::find($id);
         $newsType = news_type::orderBy('type_name','asc')->get();
-        return view('forms.edit_news_body')->with([
+        return view('forms.news_body')->with([
+                                                    'form_type' => 'edit',
+                                                    'title'     => 'Edit News', 
                                                     'newsPosts' => $newsPost,
-                                                    'newsType'  => $newsType
+                                                    'newsTypes'  => $newsType
                                                 ]);
     }
 
@@ -267,7 +280,7 @@ class news_controller extends Controller
     public function edit_news_post(Request $req , $id){
         $req->validate([
             'title' => 'required',
-            'body'  => 'required',
+            'Body'  => 'required',
             'newsType' => 'required'
         ]);
         
@@ -278,7 +291,7 @@ class news_controller extends Controller
             }
 
             $newsBody->title = $req->title;
-            $newsBody->body  = $req->body;
+            $newsBody->body  = $req->Body;
             $newsBody->type_id = $req->newsType;
 
             if(!$newsBody->save()){
@@ -379,7 +392,12 @@ class news_controller extends Controller
     }
  
     public function categories_form(){
-        return view('forms.categories');
+        $data = [
+            "action_url" => route('categories_store'),
+            "header_text"=>"Create",
+        ];
+        
+        return view('forms.categories')->with($data);
     }
 
     public function categories_store(Request $req){
@@ -387,14 +405,18 @@ class news_controller extends Controller
             'category_name' => 'required',
             'description'   => 'required'
         ]);
-
+        
         $newsType = new news_type;
-        $newsType->type_name = $req->category_name;
+        $newsType->type_name = ucfirst($req->category_name);
         $newsType->description = $req->description;
         try{
+            if($this->checkCategoryName($newsType->type_name)){
+                throw new StoringDataException('Error : Category Name is already there use another name.');
+            }
             if(!$newsType->save()){
                 throw new StoringDataException('Error: new category has not been added successfully.');
             }
+            
             return redirect('/news/categories')->with('success', 'New Category Added successfully');
         }catch(StoringDataException $e){
             return redirect()->back()->withErrors($e->getMessage())->withInput();
@@ -404,13 +426,37 @@ class news_controller extends Controller
         }
         
     }
+    /**
+     * see if the category name is already there 
+     * return : boolean 
+     * 
+     */
+    private function checkCategoryName($name){
+        $all_categories = news_type::select('*')->get();
+        $result = false;
+        
+        foreach($all_categories as $category){
+            if($category->type_name === $name){
+                $result = true;
+                break;
+            }
+        }
+        
+        return $result;
+    }
 
     public function categories_edit($id){
         $category = news_type::find($id);
         if(is_null($category)){
             return redirect()->back()->withErrors('Error : No Category with this ID.');
         }else{
-            return view('forms.categories_edit')->with('category' , $category);
+            $data=[
+                'header_text' => 'Edit',
+                'action_url'  => route('categories_edit_apply', $category->id ),
+                'postMethod'  => 'PUT',
+                'category' => $category
+            ];
+            return view('forms.categories')->with($data);
         }
     }
     public function categories_edit_apply(Request $req , $id){
@@ -420,9 +466,12 @@ class news_controller extends Controller
         ]);
 
         $category = news_type::find($id);
-        $category->type_name = $req->category_name;
+        $category->type_name = ucfirst($req->category_name);
         $category->description = $req->description;
         try{
+            if($this->checkCategoryName($category->type_name)){
+                throw new StoringDataException('Error : Category Name is already there use another name.');
+            }
             if(!$category->save()){
                 throw new StoringDataException('Error : We could not update your data successfully.');
             }

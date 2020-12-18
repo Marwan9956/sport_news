@@ -53,5 +53,6 @@ Route::put('/news/categories/edit/{id}','news_controller@categories_edit_apply')
 //Public for all users 
 Route::get('/public/news','public_controller@displayNews')->name('displayNews');
 Route::get('/public/news/fetch','public_controller@getPublicNews')->name('getPublicNews');
+Route::get('/public/news/fetch/{id}','public_controller@getPublicMoreNews')->name('getPublicMoreNews');
 Route::get('/public/news/headlines/fetch','public_controller@getPublicHeadlines')->name('getPublicHeadlines');
 

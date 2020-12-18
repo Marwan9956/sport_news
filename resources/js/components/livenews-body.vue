@@ -26,40 +26,11 @@ export default {
     name: 'livenews-body',
     data (){
         return {
-            news : [
-                {
-                    id :  1 ,
-                    time : '08.00',
-                    header: "Real Plot MAN CITY RAID",
-                    text  : "Manchester City duo Kevin de Bruyne and Raheem Sterling could be at the centre of a Real Madrid raid this summer, reports Don Balon.The 13-time European champions are looking to capitalise on City’s two-season Champions League ban and will test the reigning Premier League champions’ resolve on two of their most-influential stars if the ban is upheld by the Court of Arbitration for Sport.A verdict in City’s appeal against UEFA’s punishment is expected in July."
-                },
-                {
-                    id :  2 ,
-                    time : '08.05',
-                    header: "Real Plot MAN CITY RAID",
-                    text  : "Manchester City duo Kevin de Bruyne and Raheem Sterling could be at the centre of a Real Madrid raid this summer, reports Don Balon.The 13-time European champions are looking to capitalise on City’s two-season Champions League ban and will test the reigning Premier League champions’ resolve on two of their most-influential stars if the ban is upheld by the Court of Arbitration for Sport.A verdict in City’s appeal against UEFA’s punishment is expected in July."
-                },
-                {
-                    id :  3 ,
-                    time : '08.20',
-                    header: "Real Plot MAN CITY RAID",
-                    text  : "Manchester City duo Kevin de Bruyne and Raheem Sterling could be at the centre of a Real Madrid raid this summer, reports Don Balon.The 13-time European champions are looking to capitalise on City’s two-season Champions League ban and will test the reigning Premier League champions’ resolve on two of their most-influential stars if the ban is upheld by the Court of Arbitration for Sport.A verdict in City’s appeal against UEFA’s punishment is expected in July."
-                },
-                {
-                    id :  4 ,
-                    time : '08.40',
-                    header: "Real Plot MAN CITY RAID",
-                    text  : "Manchester City duo Kevin de Bruyne and Raheem Sterling could be at the centre of a Real Madrid raid this summer, reports Don Balon.The 13-time European champions are looking to capitalise on City’s two-season Champions League ban and will test the reigning Premier League champions’ resolve on two of their most-influential stars if the ban is upheld by the Court of Arbitration for Sport.A verdict in City’s appeal against UEFA’s punishment is expected in July."
-                },
-                {
-                    id :  5 ,
-                    time : '09.00',
-                    header: "Real Plot MAN CITY RAID",
-                    text  : "Manchester City duo Kevin de Bruyne and Raheem Sterling could be at the centre of a Real Madrid raid this summer, reports Don Balon.The 13-time European champions are looking to capitalise on City’s two-season Champions League ban and will test the reigning Premier League champions’ resolve on two of their most-influential stars if the ban is upheld by the Court of Arbitration for Sport.A verdict in City’s appeal against UEFA’s punishment is expected in July."
-                },
-            ],
             displayData:[],
-            show : false
+            lastId:0,
+            timeToInterval : 0,
+            show : false,
+            newCall:false
         }
     },
     computed:{
@@ -68,10 +39,13 @@ export default {
     methods: {
         addingNews : function(data){
             var i = 0;
+            this.timeToInterval = data.length;
             for(const prop in data){
-                this.delayPush(data[prop],i)
+                this.delayPush(data[prop],i);
                 i++;
             }
+            console.log(this.timeToInterval);
+            this.newCall=true;
             
         },
         getNews   : function(){
@@ -89,6 +63,31 @@ export default {
             })
             .then(function () {
                 // always executed
+                vr.newCall = true;
+                console.log('yes Done');
+            });
+        },
+        getMoreNews : function(){
+            var url= 'http://' + window.location.hostname  +'/public/news/fetch/' + this.lastId;
+            var vr= this;
+            this.newCall = false;
+            axios.get(url)
+            .then(function (response) {
+                // handle success
+                
+                if(response.data.length === 0){
+                    console.log(vr.lastId);
+                    console.log(response.data);
+                }
+                vr.addingNews(response.data);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+                vr.newCall = true;
             });
         },
         delayPush : function(item , i){
@@ -97,6 +96,7 @@ export default {
                 var time = 2000 * i;
                 setTimeout(function() {
                     vm.displayData.unshift(item);
+                    vm.lastId= item.id;
                 }, time);
             })(vm);
         },
@@ -113,14 +113,34 @@ export default {
         enter: function (el, done) {
             $(el).slideDown('slow');
             done();
-        }
+        },
     
         
     },
     mounted: function(){
+        //this for animation to work properly
         this.show = true;
         this.getNews();
-        //this.addingNews();
+        var vr = this;
+         
+        
+        //console.log(this.timeToInterval);
+        //SetTimeout for setInterval
+        setInterval(function(){
+            if(vr.newCall == true){
+                var time = vr.timeToInterval * 2500;
+                console.log('timeinterval is ' + vr.timeToInterval);
+                setTimeout(function(){ 
+                    vr.timeToInterval = 0;
+                    vr.getMoreNews(); 
+                }, time);
+            } 
+        }, 10000);
+        
+        
+    },
+    created (){
+        
     }
 }
 
@@ -138,15 +158,7 @@ export default {
         flex-wrap: nowrap;
         align-items: start;
     }
-    /*
-    @keyframes slideDown{
-        from {
-            max-height: 0;
-        }
-        to {
-            max-height: 500px;
-        }
-    }*/
+    
 
 
 
