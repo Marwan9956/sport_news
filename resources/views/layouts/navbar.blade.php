@@ -4,6 +4,10 @@
             <a href="{{ url('/home') }}">Home</a>
         </div>
         <div class="top-right">
+            @if(Route::currentRouteName() !== 'displayNews')
+                <a href="{{ route('displayNews') }}">Front End</a>
+            @endif
+            
             @auth
                 <div class="dropdown show">
                     <a class="btn  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/home');
 });
 
 Auth::routes();
@@ -49,7 +49,9 @@ Route::delete('/news/categories/delete/{id}','news_controller@categories_delete'
 Route::get('/news/categories/edit/{id}','news_controller@categories_edit')->name('categories_edit');
 Route::put('/news/categories/edit/{id}','news_controller@categories_edit_apply')->name('categories_edit_apply');
 
-
+/**
+ * Public News Part 
+ */
 //Public for all users 
 Route::get('/public/news','public_controller@displayNews')->name('displayNews');
 Route::get('/public/news/fetch','public_controller@getPublicNews')->name('getPublicNews');
