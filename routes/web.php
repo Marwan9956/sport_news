@@ -58,3 +58,5 @@ Route::get('/public/news/fetch','public_controller@getPublicNews')->name('getPub
 Route::get('/public/news/fetch/{id}','public_controller@getPublicMoreNews')->name('getPublicMoreNews');
 Route::get('/public/news/headlines/fetch','public_controller@getPublicHeadlines')->name('getPublicHeadlines');
 
+Route::get('/public/news/headertext/fetch','public_controller@getNewsLatestNewsHeader')->name('getNewsLatestNewsHeader');
+

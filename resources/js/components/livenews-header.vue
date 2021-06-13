@@ -1,9 +1,9 @@
 <template>
     <div class="livenews-header">
         <header>
-            <h1>Transfer Center: Jude Bellingham, Adama Traore and Ruben Neves</h1>
+            <h1>Transfer Center: {{newsHeader}}</h1>
             <h1>LIVE!</h1>
-            <p class="head-text">The latest transfer news and rumours , with updateds on Jude bellingham , Adame Traore , Ruben Naves and much more !</p>
+            <p class="head-text">{{newsHeader}}</p>
         </header>
         <div class="transfer-headlines">
             <h3>Transfer Headlines</h3>
@@ -20,6 +20,7 @@ export default {
     data (){
         return {
             data : [],
+            newsHeader : '',
             extraString:`<li><a href="#">Chelsea want to sign Havertz</a></li>
                 <li><a href="#">Papers: Liverpool in for $110m Traore Neves </a></li>
                 <li><a href="#">Papers: Dortmund confident on Bellingham  </a></li>
@@ -59,10 +60,28 @@ export default {
                 console.log(newData[index]);
                 this.data.push(newData[index]);
             }
+        },
+        getNewsHeader    :function(){
+            // Make a request for a user with a given ID
+            var url= 'http://' + window.location.hostname + '/public/news/headertext/fetch';
+            var vr= this;
+            axios.get(url)
+            .then(function (response) {
+                // handle success
+                vr.newsHeader = response.data;
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
         }
     },
     mounted : function(){
         this.getHeadlines();
+        this.getNewsHeader();
         //console.log(window.location.hostname);
     }
 }

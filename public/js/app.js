@@ -2349,6 +2349,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       data: [],
+      newsHeader: '',
       extraString: "<li><a href=\"#\">Chelsea want to sign Havertz</a></li>\n                <li><a href=\"#\">Papers: Liverpool in for $110m Traore Neves </a></li>\n                <li><a href=\"#\">Papers: Dortmund confident on Bellingham  </a></li>\n                <li><a href=\"#\">Edouard targets 10 straight titles at Celtic </a></li>\n                <li><a href=\"#\">Lallana signs short-term Liverpool deal   </a></li>\n                <li><a href=\"#\">Man City interested in signing Chilwell   </a></li>\n                <li><a href=\"#\">Ole: I wan't buy rotten apples at Man Utd </a></li>\n                <li><a href=\"#\">FA in talks to move window to August till October </a></li>\n                <li><a href=\"#\">Club rumours : Liverpool , Man City , Chelsea , Newcastle </a></li>\n                <li><a href=\"#\">Club rumours: Spurs , Arsenal , Man Utd       </a></li>\n                <li><a href=\"#\">$18 Premier League and Football channel offer </a></li>"
     };
   },
@@ -2373,10 +2374,24 @@ __webpack_require__.r(__webpack_exports__);
         console.log(newData[index]);
         this.data.push(newData[index]);
       }
+    },
+    getNewsHeader: function getNewsHeader() {
+      // Make a request for a user with a given ID
+      var url = 'http://' + window.location.hostname + '/public/news/headertext/fetch';
+      var vr = this;
+      axios.get(url).then(function (response) {
+        // handle success
+        vr.newsHeader = response.data;
+      })["catch"](function (error) {
+        // handle error
+        console.log(error);
+      }).then(function () {// always executed
+      });
     }
   },
   mounted: function mounted() {
-    this.getHeadlines(); //console.log(window.location.hostname);
+    this.getHeadlines();
+    this.getNewsHeader(); //console.log(window.location.hostname);
   }
 });
 
@@ -39760,7 +39775,13 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "livenews-header" }, [
-    _vm._m(0),
+    _c("header", [
+      _c("h1", [_vm._v("Transfer Center: " + _vm._s(_vm.newsHeader))]),
+      _vm._v(" "),
+      _c("h1", [_vm._v("LIVE!")]),
+      _vm._v(" "),
+      _c("p", { staticClass: "head-text" }, [_vm._v(_vm._s(_vm.newsHeader))])
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "transfer-headlines" }, [
       _c("h3", [_vm._v("Transfer Headlines")]),
@@ -39777,26 +39798,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("header", [
-      _c("h1", [
-        _vm._v("Transfer Center: Jude Bellingham, Adama Traore and Ruben Neves")
-      ]),
-      _vm._v(" "),
-      _c("h1", [_vm._v("LIVE!")]),
-      _vm._v(" "),
-      _c("p", { staticClass: "head-text" }, [
-        _vm._v(
-          "The latest transfer news and rumours , with updateds on Jude bellingham , Adame Traore , Ruben Naves and much more !"
-        )
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

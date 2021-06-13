@@ -63,4 +63,21 @@ class public_controller extends Controller
         $latestHeadlines = DB::table('headlines_news')->where('news_header_id',$newsHeader_id->id)->orderBy('text')->get();
         return $latestHeadlines;
     }
+
+    /**
+     * Return latest newsHeader ID
+     */
+    private function getLastnewsHeaderID(){
+        $newsHeader_id = DB::table('news_header')->orderBy('id','desc')->first();
+        return $newsHeader_id;
+    }
+
+
+    /**
+     * get News Header text 
+     */
+    public function getNewsLatestNewsHeader(){
+        $newsHeader_id = $this->getLastnewsHeaderID();
+        return $newsHeader_id->headText;
+    }
 }
