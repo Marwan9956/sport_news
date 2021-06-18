@@ -1,6 +1,6 @@
 <template>
   <div id="app-inside" >
-    <adsmain></adsmain>
+    <!-- <adsmain></adsmain> -->
     <div class="two-col">
       <livenews></livenews>
       <adssidebar></adssidebar>

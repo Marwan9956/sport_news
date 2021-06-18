@@ -39071,21 +39071,14 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { attrs: { id: "app-inside" } },
-    [
-      _c("adsmain"),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "two-col" },
-        [_c("livenews"), _vm._v(" "), _c("adssidebar")],
-        1
-      )
-    ],
-    1
-  )
+  return _c("div", { attrs: { id: "app-inside" } }, [
+    _c(
+      "div",
+      { staticClass: "two-col" },
+      [_c("livenews"), _vm._v(" "), _c("adssidebar")],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
